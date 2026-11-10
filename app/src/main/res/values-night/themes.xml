@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.FoodDeliveryV1" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">#E53935</item>
+        <item name="android:windowBackground">#F8F9FA</item>
+    </style>
+
+    <style name="Theme.FoodDeliveryV1" parent="Base.Theme.FoodDeliveryV1" />
+</resources>
