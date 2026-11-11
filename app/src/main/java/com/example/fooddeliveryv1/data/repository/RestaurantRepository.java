@@ -1,5 +1,7 @@
 package com.example.fooddeliveryv1.data.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -18,6 +20,7 @@ import retrofit2.Response;
 
 public class RestaurantRepository {
 
+    private static final String TAG = "FOOD_DELIVERY_APP";
     private final ApiService apiService;
 
     public RestaurantRepository() {
@@ -25,36 +28,44 @@ public class RestaurantRepository {
     }
 
     public LiveData<List<Restaurant>> getRestaurants() {
+        Log.d(TAG, "RestaurantRepository: getRestaurants() called, returning initial mock data instantly");
         MutableLiveData<List<Restaurant>> data = new MutableLiveData<>(getMockRestaurants());
         apiService.getRestaurants().enqueue(new Callback<List<Restaurant>>() {
             @Override
             public void onResponse(@NonNull Call<List<Restaurant>> call, @NonNull Response<List<Restaurant>> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "RestaurantRepository: API getRestaurants() Success: " + response.body().size() + " items");
                     data.setValue(response.body());
+                } else {
+                    Log.d(TAG, "RestaurantRepository: API getRestaurants() returned non-success code: " + response.code() + ", keeping mock data");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Restaurant>> call, @NonNull Throwable t) {
-                // Keep mock data
+                Log.d(TAG, "RestaurantRepository: API getRestaurants() Failure: " + t.getMessage() + ", keeping mock data");
             }
         });
         return data;
     }
 
     public LiveData<List<FoodItem>> getMenu(String restaurantId) {
+        Log.d(TAG, "RestaurantRepository: getMenu(" + restaurantId + ") called, returning initial mock menu instantly");
         MutableLiveData<List<FoodItem>> data = new MutableLiveData<>(getMockMenu(restaurantId));
         apiService.getMenu(restaurantId).enqueue(new Callback<List<FoodItem>>() {
             @Override
             public void onResponse(@NonNull Call<List<FoodItem>> call, @NonNull Response<List<FoodItem>> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "RestaurantRepository: API getMenu() Success: " + response.body().size() + " items");
                     data.setValue(response.body());
+                } else {
+                    Log.d(TAG, "RestaurantRepository: API getMenu() returned non-success code: " + response.code() + ", keeping mock data");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<FoodItem>> call, @NonNull Throwable t) {
-                // Keep mock data
+                Log.d(TAG, "RestaurantRepository: API getMenu() Failure: " + t.getMessage() + ", keeping mock data");
             }
         });
         return data;
