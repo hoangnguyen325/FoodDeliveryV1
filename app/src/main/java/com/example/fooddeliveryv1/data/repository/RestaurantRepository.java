@@ -25,40 +25,36 @@ public class RestaurantRepository {
     }
 
     public LiveData<List<Restaurant>> getRestaurants() {
-        MutableLiveData<List<Restaurant>> data = new MutableLiveData<>();
+        MutableLiveData<List<Restaurant>> data = new MutableLiveData<>(getMockRestaurants());
         apiService.getRestaurants().enqueue(new Callback<List<Restaurant>>() {
             @Override
             public void onResponse(@NonNull Call<List<Restaurant>> call, @NonNull Response<List<Restaurant>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     data.setValue(response.body());
-                } else {
-                    data.setValue(getMockRestaurants());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Restaurant>> call, @NonNull Throwable t) {
-                data.setValue(getMockRestaurants());
+                // Keep mock data
             }
         });
         return data;
     }
 
     public LiveData<List<FoodItem>> getMenu(String restaurantId) {
-        MutableLiveData<List<FoodItem>> data = new MutableLiveData<>();
+        MutableLiveData<List<FoodItem>> data = new MutableLiveData<>(getMockMenu(restaurantId));
         apiService.getMenu(restaurantId).enqueue(new Callback<List<FoodItem>>() {
             @Override
             public void onResponse(@NonNull Call<List<FoodItem>> call, @NonNull Response<List<FoodItem>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     data.setValue(response.body());
-                } else {
-                    data.setValue(getMockMenu(restaurantId));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<FoodItem>> call, @NonNull Throwable t) {
-                data.setValue(getMockMenu(restaurantId));
+                // Keep mock data
             }
         });
         return data;
